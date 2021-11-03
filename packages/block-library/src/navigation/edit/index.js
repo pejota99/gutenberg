@@ -9,7 +9,6 @@ import classnames from 'classnames';
 import { useState, useEffect, useRef, Platform } from '@wordpress/element';
 import {
 	InspectorControls,
-	JustifyToolbar,
 	BlockControls,
 	useBlockProps,
 	__experimentalUseNoRecursiveRenders as useNoRecursiveRenders,
@@ -92,7 +91,6 @@ function Navigation( {
 	// These props are used by the navigation editor to override specific
 	// navigation block settings.
 	hasSubmenuIndicatorSetting = true,
-	hasItemJustificationControls = true,
 	hasColorSettings = true,
 	customPlaceholder: CustomPlaceholder = null,
 	customAppender: CustomAppender = null,
@@ -163,6 +161,7 @@ function Navigation( {
 			[ `items-justified-${ attributes.itemsJustification }` ]: itemsJustification,
 			'is-vertical': orientation === 'vertical',
 			'is-responsive': 'never' !== overlayMenu,
+			'is-responsive-menu-open': isResponsiveMenuOpen,
 			'has-text-color': !! textColor.color || !! textColor?.class,
 			[ getColorClassName(
 				'color',
@@ -270,11 +269,6 @@ function Navigation( {
 		? CustomPlaceholder
 		: Placeholder;
 
-	const justifyAllowedControls =
-		orientation === 'vertical'
-			? [ 'left', 'center', 'right' ]
-			: [ 'left', 'center', 'right', 'space-between' ];
-
 	return (
 		<EntityProvider
 			kind="postType"
@@ -302,19 +296,6 @@ function Navigation( {
 								) }
 							</ToolbarDropdownMenu>
 						</ToolbarGroup>
-					) }
-					{ hasItemJustificationControls && (
-						<JustifyToolbar
-							value={ itemsJustification }
-							allowedControls={ justifyAllowedControls }
-							onChange={ ( value ) =>
-								setAttributes( { itemsJustification: value } )
-							}
-							popoverProps={ {
-								position: 'bottom right',
-								isAlternate: true,
-							} }
-						/>
 					) }
 					<ToolbarGroup>{ listViewToolbarButton }</ToolbarGroup>
 					<ToolbarGroup>
